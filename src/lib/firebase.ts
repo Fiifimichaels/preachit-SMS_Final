@@ -1,6 +1,6 @@
 
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 
 // IMPORTANT: Replace this with your own Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -19,14 +19,5 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getFirestore(app);
 
-// Connect to Firestore emulator in development
-if (process.env.NODE_ENV === 'development') {
-  try {
-    connectFirestoreEmulator(db, 'localhost', 8080);
-  } catch (error) {
-    // Emulator connection may already be established
-    console.log('Firestore emulator connection already established or failed:', error);
-  }
-}
 
 export { app, db };
