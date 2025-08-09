@@ -55,7 +55,9 @@ export async function sendDashboardSms(formData: FormData) {
         // More flexible success detection
         const isSuccess = hubtelResponse.status === 200 || hubtelResponse.status === 201 || 
                          (hubtelResult && (hubtelResult.status === 0 || hubtelResult.Status === 0 || hubtelResult.jobId)) ||
-                         (hubtelResponse.status >= 200 && hubtelResponse.status < 300);
+                         (hubtelResponse.status >= 200 && hubtelResponse.status < 300) ||
+                         (hubtelResponseText && hubtelResponseText.includes('success')) ||
+                         (hubtelResponseText && hubtelResponseText.includes('Success'));
 
         if (!isSuccess) {
             console.error("Hubtel API Error:", hubtelResult);

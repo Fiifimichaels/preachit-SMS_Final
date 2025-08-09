@@ -75,7 +75,9 @@ export async function sendBulkSms(formData: FormData) {
         // More flexible success detection for bulk SMS
         const isSuccess = hubtelResponse.status === 200 || hubtelResponse.status === 201 || 
                          (hubtelResult && (hubtelResult.status === 0 || hubtelResult.Status === 0 || hubtelResult.jobId)) ||
-                         (hubtelResponse.status >= 200 && hubtelResponse.status < 300);
+                         (hubtelResponse.status >= 200 && hubtelResponse.status < 300) ||
+                         (hubtelResponseText && hubtelResponseText.includes('success')) ||
+                         (hubtelResponseText && hubtelResponseText.includes('Success'));
 
         if (!isSuccess) {
           console.error('Hubtel API Error:', hubtelResult);
@@ -84,15 +86,16 @@ export async function sendBulkSms(formData: FormData) {
         }
     }
 
-    const status = failedRecipients.length === 0 ? 'Sent' : 'Partially Sent';
+    const status = failedRecipients.length === 0 ? 'Sent' : 
+                   failedRecipients.length === recipients.length ? 'Failed' : 'Partially Sent';
 
     await addDoc(collection(db, 'smsHistory'), {
       senderId,
       recipientCount: recipients.length,
       failedRecipientCount: failedRecipients.length,
-      recipientGroups: [],
       message,
       status,
+      type: 'bulk',
       date: new Date().toISOString().split('T')[0],
       createdAt: new Date(),
       ...(failedRecipients.length > 0 ? { failedRecipients } : {}),

@@ -1,7 +1,7 @@
 import { getContacts } from '@/lib/data';
 import { MainLayout } from '@/components/main-layout';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { BulkSmsForm } from '@/components/bulk-sms-form';
+import { BulkSmsClient } from '@/components/bulk-sms-client';
 
 export const revalidate = 0; // Ensure dynamic rendering
 
@@ -17,7 +17,7 @@ export default async function BulkSmsPage() {
                     <CardDescription>Select recipients and send a message to all of them at once.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <BulkSmsForm contacts={initialContacts} />
+                    <BulkSmsClient initialContacts={initialContacts} />
                 </CardContent>
             </Card>
         </div>
